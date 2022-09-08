@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SOME WEBSITE</title>
+</head>
+<body>
+<h1>Some Website</h1>
+<!-- Form with input text field and submit button, on submit run javascript api and print output-->
+<form action="javascript:api()">
+    <h2>Enter original (decrypted text)</h2>
+    <input type="text" id="input" required>
+    <input type="submit" value="Submit">
+</form>
+<!-- Output div -->
+<div id="output"></div>
+
+<script>
+    // on submit run api function and http://127.0.0.1:8000/validate post api
+    function api() {
+       var formdata = new FormData();
+       var input_text = document.getElementById("input").value;
+
+        formdata.append("input_text", input_text);
+
+        var requestOptions = {
+          method: 'POST',
+          body: formdata,
+          redirect: 'follow'
+        };
+
+        fetch("https://encrypt-api-lokesh.herokuapp.com/validate", requestOptions)
+          .then(response => response.text())
+          .then(result =>  document.getElementById("output").innerHTML = result)
+          .catch(error => console.log('error', error));
+    }
+</script>
+
+<p>Some content</p>
+</body>
+</html>
