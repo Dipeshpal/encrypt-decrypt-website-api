@@ -7,12 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from fastapi.templating import Jinja2Templates
 import os
+from combi import li
+import random
 
 unlock_sentence = os.environ.get('unlock_sentence', "some sentence")
 default_secret_number = os.environ.get('default_secret_number', 5)
 
 templates = Jinja2Templates(directory="templates")
-
 
 app = FastAPI()
 
@@ -41,10 +42,15 @@ def decrypt_text(text_to_decrypt: Union[str, None] = None, secret_number: Union[
 
 @app.post("/validate")
 def validate_input(input_text: str = Form()):
-    if unlock_sentence.strip() == input_text.strip():
+    if input_text.strip() in li:
         return "success"
     else:
         return "failed"
+
+
+@app.get("/get_random_sentence")
+def get_random_sentence():
+    return start_encryption(random.choice(li))
 
 
 @app.get("/")
